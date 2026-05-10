@@ -12,8 +12,9 @@ Replication of Wang et al. (EMNLP 2025): a Retrieval-Augmented Generation framew
 
 | Name | GitHub |
 |---|---|
-| _(fill in before submission)_ | _(fill in)_ |
-| _(fill in before submission)_ | _(fill in)_ |
+| Abhishek Kanilal Alhat | _(fill in)_ |
+| Shraya Ramamoorthy | _(fill in)_ |
+| Keita Katsumi | keiakihito |
 
 ---
 
@@ -56,7 +57,7 @@ generate_and_judfe/    # Stage 3 — Inference and evaluation
   tools.py             # API client wrappers (OpenAI, DeepSeek, etc.)
 
 qa_dataset/            # Prepared evaluation datasets (JSONL)
-formal_answer/         # Model outputs from evaluation runs
+outputs/         # Model outputs from evaluation runs
 prepare_dataset.py     # Convert TriviaQA HuggingFace parquet → JSONL
 requirements.txt
 ```
@@ -100,12 +101,12 @@ The output files from our runs are already committed to this repo. To reproduce 
 # Verify no_rag result (should print EM: 397)
 python generate_and_judfe/judge_res.py \
     qa_dataset/trivia_val_shuffle_500.jsonl \
-    formal_answer/trivia/no_rag/gpt-4o-mini.jsonl
+    outputs/trivia/no_rag/gpt-4o-mini.jsonl
 
 # Verify rag result (should print EM: 361)
 python generate_and_judfe/judge_res.py \
     qa_dataset/trivia_val_shuffle_500.jsonl \
-    formal_answer/trivia/rag/gpt-4o-mini.jsonl
+    outputs/trivia/rag/gpt-4o-mini.jsonl
 ```
 
 `judge_res.py` does string matching only — no GPU, no API key, runs in seconds.
@@ -129,11 +130,11 @@ python prepare_dataset.py \
 ### Stage 2 — Generate Answers (No RAG baseline)
 
 ```bash
-mkdir -p formal_answer/trivia/no_rag
+mkdir -p outputs/trivia/no_rag
 python generate_and_judfe/gen_res.py \
     --qa_dataset qa_dataset/trivia_val_shuffle_500.jsonl \
     --inference_model gpt-4o-mini \
-    --output_file formal_answer/trivia/no_rag/gpt-4o-mini.jsonl \
+    --output_file outputs/trivia/no_rag/gpt-4o-mini.jsonl \
     --num_workers 1 \
     --mode no_rag
 ```
@@ -141,11 +142,11 @@ python generate_and_judfe/gen_res.py \
 ### Stage 3 — Generate Answers (RAG mode)
 
 ```bash
-mkdir -p formal_answer/trivia/rag
+mkdir -p outputs/trivia/rag
 python generate_and_judfe/gen_res.py \
     --qa_dataset qa_dataset/trivia_val_shuffle_500.jsonl \
     --inference_model gpt-4o-mini \
-    --output_file formal_answer/trivia/rag/gpt-4o-mini.jsonl \
+    --output_file outputs/trivia/rag/gpt-4o-mini.jsonl \
     --num_workers 1 \
     --mode rag
 ```
@@ -155,11 +156,11 @@ python generate_and_judfe/gen_res.py \
 ```bash
 python generate_and_judfe/judge_res.py \
     qa_dataset/trivia_val_shuffle_500.jsonl \
-    formal_answer/trivia/no_rag/gpt-4o-mini.jsonl
+    outputs/trivia/no_rag/gpt-4o-mini.jsonl
 
 python generate_and_judfe/judge_res.py \
     qa_dataset/trivia_val_shuffle_500.jsonl \
-    formal_answer/trivia/rag/gpt-4o-mini.jsonl
+    outputs/trivia/rag/gpt-4o-mini.jsonl
 ```
 
 ---
@@ -176,7 +177,7 @@ Evaluation on TriviaQA rc.wikipedia validation split (500 questions, GPT-4o-mini
 
 > **Note:** Naive RAG scores lower than No RAG because `entity_pages` passages are limited (1–3 Wikipedia articles per question, not retrieved by a retrieval system). This replicates the core motivation of InfoGain-RAG: unfiltered documents hurt generation quality. The InfoGain-RAG row requires the trained reranker checkpoint (Stage 2).
 
-Sample outputs from both runs are in `formal_answer/trivia/`.
+Sample outputs from both runs are in `outputs/trivia/`.
 
 ---
 
