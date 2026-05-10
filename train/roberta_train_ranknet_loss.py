@@ -54,7 +54,7 @@ class QueryDocumentDataset(Dataset):
         query_doc_pairs = []
         for doc in shuffled_documents:
             concatenated_text = f'query:{query} passage:{doc}'
-            encoding = self.tokenizer.encode_plus(
+            encoding = self.tokenizer(
                 concatenated_text,
                 add_special_tokens=True,
                 max_length=self.max_len,
