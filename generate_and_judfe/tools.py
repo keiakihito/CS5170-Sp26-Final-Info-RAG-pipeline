@@ -21,7 +21,6 @@ def openai_inference(model_name,messages):
 
     client = OpenAI(
         api_key=os.environ["OPENAI_API_KEY"],
-        base_url="https://api.feidaapi.com/v1"
     )
 
     completion = client.chat.completions.create(
