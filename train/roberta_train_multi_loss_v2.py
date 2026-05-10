@@ -261,7 +261,8 @@ def main():
     save_interval = 0.04
     total_batches = len(train_loader)
     save_frequency = int(total_batches * save_interval)
-    
+    best_val_acc = 0.0  # only save when validation accuracy improves
+
     for epoch in range(num_epochs):
         model.train()
         running_loss = 0
@@ -316,13 +317,19 @@ def main():
                 print(f'Binary Classification Accuracy: {current_binary_acc:.2f}%')
                 print(f'Pos score: {pos_score.item():.4f}, Neg scores mean: {neg_scores.mean().item():.4f}')
             
-            # Save checkpoint — always overwrite best_model.pt to save disk space
+            # Save checkpoint only when validation accuracy improves
             if (batch_idx + 1) % save_frequency == 0:
                 val_metrics = evaluate_model(model, val_loader, device)
 
                 os.makedirs(args.out_dir, exist_ok=True)
                 checkpoint_path = os.path.join(args.out_dir, 'best_model.pt')
 
+                if val_metrics['ranking_accuracy'] <= best_val_acc:
+                    print(f'\nVal acc {val_metrics["ranking_accuracy"]:.2f}% did not improve from {best_val_acc:.2f}%, skipping save.\n')
+                    model.train()
+                    continue
+
+                best_val_acc = val_metrics['ranking_accuracy']
                 torch.save({
                     'epoch': current_epoch,
                     'model_state_dict': model.state_dict(),
