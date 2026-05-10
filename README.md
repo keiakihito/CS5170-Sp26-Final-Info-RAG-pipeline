@@ -185,11 +185,11 @@ Sample outputs from both runs are in `outputs/trivia/`.
 
 The trained RoBERTa reranker checkpoint is hosted on HuggingFace Hub:
 
-> **[keiakihito/infogain-rag-reranker](https://huggingface.co/keiakihito/infogain-rag-reranker)** _(link to be activated after upload)_
+> **[kkatsumiCPP/infogain-rag-reranker](https://huggingface.co/kkatsumiCPP/infogain-rag-reranker)**
 
 To download and use:
 ```bash
-huggingface-cli download keiakihito/infogain-rag-reranker best_model.pt --local-dir checkpoints/
+hf download kkatsumiCPP/infogain-rag-reranker best_model.pt --local-dir checkpoints/
 ```
 
 - Trained on 224 TriviaQA samples, 1 epoch
