@@ -316,15 +316,13 @@ def main():
                 print(f'Binary Classification Accuracy: {current_binary_acc:.2f}%')
                 print(f'Pos score: {pos_score.item():.4f}, Neg scores mean: {neg_scores.mean().item():.4f}')
             
-            # Save checkpoint
+            # Save checkpoint — always overwrite best_model.pt to save disk space
             if (batch_idx + 1) % save_frequency == 0:
-                # Evaluate on validation set
                 val_metrics = evaluate_model(model, val_loader, device)
-                
+
                 os.makedirs(args.out_dir, exist_ok=True)
-                checkpoint_path = os.path.join(args.out_dir, f'model_epoch_{current_epoch:.2f}_valloss_{val_metrics["loss"]:.4f}_valacc_{val_metrics["ranking_accuracy"]:.2f}.pt')
-                
-                # Save checkpoint with validation metrics
+                checkpoint_path = os.path.join(args.out_dir, 'best_model.pt')
+
                 torch.save({
                     'epoch': current_epoch,
                     'model_state_dict': model.state_dict(),
@@ -335,7 +333,7 @@ def main():
                     'val_ranking_accuracy': val_metrics['ranking_accuracy'],
                     'val_binary_accuracy': val_metrics['binary_accuracy']
                 }, checkpoint_path)
-                
+
                 print(f'\nCheckpoint saved: {checkpoint_path}')
                 print(f'Validation Metrics:')
                 print(f'Total Loss: {val_metrics["loss"]:.4f}')
@@ -343,8 +341,7 @@ def main():
                 print(f'BCE Loss: {val_metrics["bce_loss"]:.4f}')
                 print(f'Ranking Accuracy: {val_metrics["ranking_accuracy"]:.2f}%')
                 print(f'Binary Classification Accuracy: {val_metrics["binary_accuracy"]:.2f}%\n')
-                
-                # Switch back to training mode
+
                 model.train()
 
 
