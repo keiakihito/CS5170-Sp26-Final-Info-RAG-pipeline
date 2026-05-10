@@ -181,6 +181,25 @@ Sample outputs from both runs are in `outputs/trivia/`.
 
 ---
 
+## Replication Notes (Important for Paper Write-up)
+
+These notes explain the gaps between our replication and the original paper. **Team members should include these points in the paper's Replication section.**
+
+### Training data gap
+The original paper trained the RoBERTa reranker on tens of thousands of query-passage pairs retrieved by Contriever from the full Wikipedia corpus. We did not have access to that retrieval pipeline, so we trained on **224 samples** derived from TriviaQA `entity_pages` (the Wikipedia articles directly linked to each question in the dataset). This is a much smaller and less diverse training set.
+
+As a result, our reranker's ranking accuracy is limited (~51% on our validation split vs. ~72% expected from full training). Suggested paper wording:
+
+> *"Due to resource constraints, we trained the reranker on 224 samples from entity_pages passages rather than the full Contriever-retrieved training set used in the original paper. As a result, reranker performance is limited. Despite this, we demonstrate the full end-to-end pipeline and treat this as a lower-bound replication result."*
+
+### Passage retrieval gap
+The original paper uses **Contriever** to retrieve the top-k most relevant passages per query from the full Wikipedia dump. We use `entity_pages` from the TriviaQA dataset directly, which provides only 1–3 pre-linked Wikipedia articles per question rather than retrieved passages. This explains why Naive RAG (EM 72.2%) scores *lower* than No RAG (EM 79.4%) — the passages are not always relevant enough to help the model.
+
+### Model gap
+The original paper evaluates with **Qwen2.5-7B**. We evaluate with **GPT-4o-mini** via API due to GPU constraints. GPT-4o-mini has stronger baseline knowledge, which inflates the No RAG score and reduces the relative benefit of retrieved passages.
+
+---
+
 ## Extension Plan (Future Work)
 
 We propose applying InfoGain-RAG to a **domain transfer** setting: evaluating whether DIG-based reranking generalizes to medical QA (e.g., MedQA or BioASQ), where retrieved documents are highly technical and noisy. The hypothesis is that DIG filtering provides even larger gains in specialized domains where naive RAG is more likely to surface irrelevant passages. This is a task transfer extension as defined in the course rubric.
