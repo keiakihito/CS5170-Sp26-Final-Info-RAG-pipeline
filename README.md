@@ -92,7 +92,27 @@ export DEEPINFRA_API_KEY=your_key_here     # if using DeepInfra models
 
 ---
 
-## Running the Pipeline
+## Quick Evaluation (CPU only — no GPU, no API key needed)
+
+The output files from our runs are already committed to this repo. To reproduce the EM scores on your local machine:
+
+```bash
+# Verify no_rag result (should print EM: 397)
+python generate_and_judfe/judge_res.py \
+    qa_dataset/trivia_val_shuffle_500.jsonl \
+    formal_answer/trivia/no_rag/gpt-4o-mini.jsonl
+
+# Verify rag result (should print EM: 361)
+python generate_and_judfe/judge_res.py \
+    qa_dataset/trivia_val_shuffle_500.jsonl \
+    formal_answer/trivia/rag/gpt-4o-mini.jsonl
+```
+
+`judge_res.py` does string matching only — no GPU, no API key, runs in seconds.
+
+---
+
+## Running the Full Pipeline
 
 ### Stage 1 — Prepare Dataset
 
