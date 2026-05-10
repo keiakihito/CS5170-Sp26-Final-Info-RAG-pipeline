@@ -67,7 +67,7 @@ def inference_rag(data, model_name, top_k=4, rj='0'):
     qs = data["question"]
     merged_passage = ""
     passages = data['top_passages']
-    for j in range(top_k):
+    for j in range(min(top_k, len(passages))):
         tmp_passage = 'title:' + passages[j]['title'] + 'text:' + passages[j]['text']
         merged_passage += f"PASSAGE{j+1}:" + tmp_passage + "\n"
     prompt_template = "passages:\n" + merged_passage + instruction + "\nquestion:\n"
