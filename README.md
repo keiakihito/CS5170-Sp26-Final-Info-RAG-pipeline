@@ -10,11 +10,7 @@ Replication of Wang et al. (EMNLP 2025): a Retrieval-Augmented Generation framew
 
 ## Team Members
 
-| Name | GitHub |
-|---|---|
-| Abhishek Kanilal Alhat | _(fill in)_ |
-| Shraya Ramamoorthy | _(fill in)_ |
-| Keita Katsumi | keiakihito |
+Abhishek Kanilal Alhat · Keita Katsumi · Shraya Ramamoorthy
 
 ---
 
