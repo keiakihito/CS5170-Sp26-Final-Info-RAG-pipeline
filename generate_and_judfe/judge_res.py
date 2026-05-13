@@ -4,7 +4,7 @@ import argparse
 
 def regularization(input_string):
     result = re.sub(r'[.,]', '', input_string)
-    result = re.sub(r'[\"\']', '', input_string)
+    result = re.sub(r'[\"\']', '', result)
     result = result.split('\n')[0]
     result = result.lower()
     result = result.split(" was a ", 1)[1].strip() if " was a " in result else result
@@ -40,7 +40,8 @@ def main(test_path, res_path):
         except Exception as e:
             print(f"Error at index {i}: {e}")
 
-    print('EM:', cnt_answer)
+    total = 500
+    print(f"EM: {cnt_answer} / {total}  ({cnt_answer / total * 100:.1f}%)")
     print("-" * 50)
 
 if __name__ == "__main__":
