@@ -95,14 +95,13 @@ The output files from our runs are already committed to this repo. To reproduce 
 
 ```bash
 # Verify no_rag result (should print EM: 397)
-python generate_and_judfe/judge_res.py \
-    qa_dataset/trivia_val_shuffle_500.jsonl \
-    outputs/trivia/no_rag/gpt-4o-mini.jsonl
+python3 generate_and_judfe/judge_res.py qa_dataset/trivia_val_shuffle_500.jsonl outputs/trivia/no_rag/gpt-4o-mini.jsonl
 
 # Verify rag result (should print EM: 361)
-python generate_and_judfe/judge_res.py \
-    qa_dataset/trivia_val_shuffle_500.jsonl \
-    outputs/trivia/rag/gpt-4o-mini.jsonl
+python3 generate_and_judfe/judge_res.py qa_dataset/trivia_val_shuffle_500.jsonl outputs/trivia/rag/gpt-4o-mini.jsonl
+
+# Verify reranked result (should print EM: 366)
+python3 generate_and_judfe/judge_res.py qa_dataset/trivia_val_shuffle_500.jsonl outputs/trivia/reranked/gpt-4o-mini.jsonl
 ```
 
 `judge_res.py` does string matching only — no GPU, no API key, runs in seconds.
